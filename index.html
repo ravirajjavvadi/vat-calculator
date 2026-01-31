@@ -1,215 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAT Calculator | JR Tech Solutions</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAT Pro Max | JR Tech Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dark Mode Palette */
+            --bg: #050a18;
+            --card: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.3);
+        }
 
-<style>
-* {
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
+        [data-theme="light"] {
+            /* Light Mode Palette */
+            --bg: #f0f4f8;
+            --card: rgba(255, 255, 255, 0.8);
+            --text: #1a1a2e;
+            --primary: #007aff;
+            --secondary: #5856d6;
+            --border: rgba(0, 0, 0, 0.05);
+            --input-bg: #ffffff;
+        }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0a1f44, #1b3c73, #2a5298);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-}
+        * {
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
 
-.vat-calc {
-    width: 100%;
-    max-width: 430px;
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(15px);
-    border-radius: 22px;
-    padding: 28px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
-    animation: slideUp 0.9s ease;
-}
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--text);
+        }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(25px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        /* Animated Blob Background */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.2;
+            animation: move 20s infinite alternate;
+        }
 
-/* BRAND HEADER */
-.brand {
-    text-align: center;
-    margin-bottom: 22px;
-}
+        @keyframes move {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(20%, 20%); }
+        }
 
-.brand h1 {
-    font-size: 22px;
-    margin: 0;
-    letter-spacing: 1px;
-}
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            animation: fadeInScale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-.brand span {
-    font-size: 12px;
-    opacity: 0.85;
-    color: #00ffd5;
-}
+        .vat-calc {
+            background: var(--card);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 35px;
+            padding: 40px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+            position: relative;
+        }
 
-.vat-calc h2 {
-    text-align: center;
-    margin: 15px 0 25px;
-    font-weight: 500;
-    font-size: 20px;
-}
+        /* Theme Switcher Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            cursor: pointer;
+            width: 50px;
+            height: 26px;
+            background: var(--input-bg);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
 
-/* FORM */
-form div {
-    margin-bottom: 16px;
-}
+        .toggle-circle {
+            width: 18px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: 0.3s transform;
+            box-shadow: 0 0 10px var(--primary);
+        }
 
-label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    opacity: 0.9;
-}
+        [data-theme="light"] .toggle-circle {
+            transform: translateX(24px);
+        }
 
-input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background: rgba(255,255,255,0.22);
-    color: #fff;
-}
+        .brand h1 {
+            font-size: 24px;
+            margin: 0;
+            background: linear-gradient(to right, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-input::placeholder {
-    color: #e0e0e0;
-}
+        .brand span {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary);
+            font-weight: 600;
+        }
 
-input:focus {
-    box-shadow: 0 0 0 2px rgba(0,255,213,0.5);
-}
+        .form-group {
+            margin-top: 30px;
+        }
 
-input[disabled] {
-    background: rgba(255,255,255,0.15);
-    color: #00ffd5;
-    font-weight: 600;
-}
+        .input-box {
+            margin-bottom: 20px;
+            transform: translateY(0);
+            transition: 0.3s;
+        }
 
-/* BUTTONS */
-.button_group {
-    display: flex;
-    gap: 14px;
-    margin-top: 22px;
-}
+        .input-box:focus-within {
+            transform: translateY(-3px);
+        }
 
-.main-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
 
-#calc-btn {
-    background: linear-gradient(135deg, #00ffd5, #00b4ff);
-    color: #002;
-}
+        input {
+            width: 100%;
+            padding: 15px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: var(--text);
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
 
-#reset-btn {
-    background: rgba(255,255,255,0.25);
-    color: #fff;
-}
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+        }
 
-.main-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.35);
-}
+        input[disabled] {
+            border-style: solid;
+            background: transparent;
+            font-weight: bold;
+            color: var(--primary);
+        }
 
-/* FOOTER */
-.footer {
-    text-align: center;
-    font-size: 12px;
-    margin-top: 18px;
-    opacity: 0.85;
-}
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
 
-.footer strong {
-    color: #00ffd5;
-}
-</style>
+        button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 18px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #calc {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 242, 255, 0.2);
+        }
+
+        #calc:hover {
+            box-shadow: 0 15px 30px rgba(0, 242, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        #reset {
+            background: var(--input-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Floating Animation for result labels */
+        .success-pulse {
+            animation: pulse 0.5s ease-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </head>
+<body data-theme="dark">
 
-<body>
+<div class="blob"></div>
 
-<div class="vat-calc">
-    <div class="brand">
-        <h1>JR Tech Solutions</h1>
-        <span>Innovating Digital Experiences</span>
-    </div>
-
-    <h2>VAT Calculator</h2>
-
-    <form onsubmit="return false;">
-        <div>
-            <label>Net Price</label>
-            <input type="number" id="net" placeholder="0.00" min="0">
+<div class="container">
+    <div class="vat-calc">
+        <div class="theme-toggle" id="themeSwitch">
+            <div class="toggle-circle"></div>
         </div>
 
-        <div>
-            <label>VAT Rate (%)</label>
-            <input type="number" id="rate" placeholder="0.00" min="0">
+        <div class="brand">
+            <h1>JR Tech</h1>
+            <span>VAT CALCULATOR</span>
         </div>
 
-        <div>
-            <label>VAT Amount</label>
-            <input type="number" id="vat" disabled placeholder="0.00">
+        <div class="form-group">
+            <div class="input-box">
+                <label>Amount (Net)</label>
+                <input type="number" id="net" placeholder="e.g. 1000">
+            </div>
+            <div class="input-box">
+                <label>VAT Percentage</label>
+                <input type="number" id="rate" value="20">
+            </div>
+            <div class="input-box">
+                <label>VAT Amount</label>
+                <input type="text" id="vat" disabled placeholder="0.00">
+            </div>
+            <div class="input-box">
+                <label>Total (Inclusive)</label>
+                <input type="text" id="total" disabled placeholder="0.00">
+            </div>
         </div>
 
-        <div>
-            <label>Total Price (Inclusive)</label>
-            <input type="number" id="total" disabled placeholder="0.00">
+        <div class="btn-group">
+            <button id="calc">Calculate</button>
+            <button id="reset">Reset</button>
         </div>
-    </form>
 
-    <div class="button_group">
-        <button class="main-btn" id="calc">Calculate</button>
-        <button class="main-btn" id="reset">Reset</button>
-    </div>
-
-    <div class="footer">
-        © 2026 <strong>JR Tech Solutions</strong> • All Rights Reserved
+        <div class="footer">
+            &copy; 2026 JR Tech Solutions
+        </div>
     </div>
 </div>
 
 <script>
-const net = document.getElementById("net");
-const rate = document.getElementById("rate");
-const vat = document.getElementById("vat");
-const total = document.getElementById("total");
+    const body = document.body;
+    const themeSwitch = document.getElementById('themeSwitch');
+    const netInput = document.getElementById('net');
+    const rateInput = document.getElementById('rate');
+    const vatInput = document.getElementById('vat');
+    const totalInput = document.getElementById('total');
 
-document.getElementById("calc").onclick = () => {
-    const n = parseFloat(net.value);
-    const r = parseFloat(rate.value);
+    // Theme Toggle Logic
+    themeSwitch.onclick = () => {
+        const currentTheme = body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', newTheme);
+    };
 
-    if (isNaN(n) || isNaN(r)) {
-        alert("Please enter valid values");
-        return;
-    }
+    // Calculation Logic with Animation
+    document.getElementById('calc').onclick = () => {
+        const n = parseFloat(netInput.value);
+        const r = parseFloat(rateInput.value);
 
-    const v = (n * r) / 100;
-    vat.value = v.toFixed(2);
-    total.value = (n + v).toFixed(2);
-};
+        if (isNaN(n) || isNaN(r)) {
+            netInput.style.borderColor = "#ff4d4d";
+            setTimeout(() => netInput.style.borderColor = "var(--border)", 2000);
+            return;
+        }
 
-document.getElementById("reset").onclick = () => {
-    net.value = rate.value = vat.value = total.value = "";
-};
+        const v = (n * r) / 100;
+        const t = n + v;
+
+        // Apply formatted values
+        vatInput.value = v.toLocaleString(undefined, {minimumFractionDigits: 2});
+        totalInput.value = t.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+        // Add success animation
+        [vatInput, totalInput].forEach(el => {
+            el.parentElement.classList.add('success-pulse');
+            setTimeout(() => el.parentElement.classList.remove('success-pulse'), 500);
+        });
+    };
+
+    document.getElementById('reset').onclick = () => {
+        [netInput, rateInput, vatInput, totalInput].forEach(i => i.value = "");
+        rateInput.value = "20";
+    };
 </script>
 
 </body>
