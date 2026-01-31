@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAT Pro Max | JR Tech Solutions</title>
+    <title>Finance Pro | JR Tech Solutions</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Dark Mode Palette */
             --bg: #050a18;
             --card: rgba(255, 255, 255, 0.05);
             --text: #ffffff;
@@ -18,307 +17,255 @@
         }
 
         [data-theme="light"] {
-            /* Light Mode Palette */
             --bg: #f0f4f8;
-            --card: rgba(255, 255, 255, 0.8);
+            --card: rgba(255, 255, 255, 0.9);
             --text: #1a1a2e;
             --primary: #007aff;
             --secondary: #5856d6;
-            --border: rgba(0, 0, 0, 0.05);
+            --border: rgba(0, 0, 0, 0.1);
             --input-bg: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-            transition: background 0.5s ease, color 0.5s ease;
-        }
+        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body {
             margin: 0;
             min-height: 100vh;
             background: var(--bg);
             display: flex;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        /* SIDEBAR NAV */
+        nav {
+            width: 80px;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+            gap: 25px;
+            z-index: 10;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            font-size: 20px;
+            opacity: 0.5;
+            padding: 12px;
+            border-radius: 15px;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* MAIN AREA */
+        main {
+            flex: 1;
+            display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            color: var(--text);
-        }
-
-        /* Animated Blob Background */
-        .blob {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            filter: blur(80px);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.2;
-            animation: move 20s infinite alternate;
-        }
-
-        @keyframes move {
-            from { transform: translate(-20%, -20%); }
-            to { transform: translate(20%, 20%); }
-        }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            animation: fadeInScale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .vat-calc {
-            background: var(--card);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
-            border-radius: 35px;
-            padding: 40px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.2);
             position: relative;
         }
 
-        /* Theme Switcher Toggle */
-        .theme-toggle {
+        .blob {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            cursor: pointer;
-            width: 50px;
-            height: 26px;
-            background: var(--input-bg);
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            padding: 4px;
-            border: 1px solid var(--border);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: move 15s infinite alternate;
         }
 
-        .toggle-circle {
-            width: 18px;
-            height: 18px;
-            background: var(--primary);
-            border-radius: 50%;
-            transition: 0.3s transform;
-            box-shadow: 0 0 10px var(--primary);
-        }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(10%, 10%); } }
 
-        [data-theme="light"] .toggle-circle {
-            transform: translateX(24px);
-        }
-
-        .brand h1 {
-            font-size: 24px;
-            margin: 0;
-            background: linear-gradient(to right, var(--text), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand span {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-top: 30px;
-        }
-
-        .input-box {
-            margin-bottom: 20px;
-            transform: translateY(0);
-            transition: 0.3s;
-        }
-
-        .input-box:focus-within {
-            transform: translateY(-3px);
-        }
-
-        label {
-            display: block;
-            font-size: 11px;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            opacity: 0.7;
-            text-transform: uppercase;
-        }
-
-        input {
+        .calc-card {
             width: 100%;
-            padding: 15px;
-            background: var(--input-bg);
+            max-width: 450px;
+            background: var(--card);
+            backdrop-filter: blur(30px);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            color: var(--text);
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.3);
         }
 
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+        .section { display: none; animation: slideIn 0.5s ease forwards; }
+        .section.active { display: block; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 26px; margin: 0 0 5px; background: linear-gradient(90deg, var(--text), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p { font-size: 12px; opacity: 0.6; margin-bottom: 30px; letter-spacing: 1px; }
+
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .full-width { grid-column: span 2; }
+
+        label { display: block; font-size: 11px; margin-bottom: 8px; text-transform: uppercase; opacity: 0.7; }
+        input, select {
+            width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--border); 
+            border-radius: 14px; color: var(--text); font-size: 15px; outline: none;
         }
 
-        input[disabled] {
-            border-style: solid;
-            background: transparent;
-            font-weight: bold;
-            color: var(--primary);
-        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.1); }
+        .result-box { border: 1px dashed var(--primary); background: rgba(0, 242, 255, 0.05); font-weight: 600; color: var(--primary); }
 
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        button {
-            flex: 1;
-            padding: 16px;
-            border-radius: 18px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        #calc {
+        .btn-calc {
+            width: 100%; padding: 16px; margin-top: 20px; border-radius: 18px; border: none;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 10px 20px rgba(0, 242, 255, 0.2);
+            color: #fff; font-weight: 600; cursor: pointer; transform: scale(1);
         }
 
-        #calc:hover {
-            box-shadow: 0 15px 30px rgba(0, 242, 255, 0.4);
-            transform: scale(1.02);
+        .btn-calc:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+        /* THEME TOGGLE */
+        .theme-btn {
+            position: absolute; top: 30px; right: 30px; cursor: pointer; font-size: 24px;
         }
 
-        #reset {
-            background: var(--input-bg);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 12px;
-            opacity: 0.5;
-        }
-
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Floating Animation for result labels */
-        .success-pulse {
-            animation: pulse 0.5s ease-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
     </style>
 </head>
 <body data-theme="dark">
 
-<div class="blob"></div>
+<nav>
+    <div class="nav-item active" onclick="showCalc('vat', this)" title="VAT Calculator">📊</div>
+    <div class="nav-item" onclick="showCalc('gold', this)" title="Gold Calculator">🪙</div>
+    <div class="nav-item" onclick="showCalc('loan', this)" title="Loan Calculator">🏦</div>
+</nav>
 
-<div class="container">
-    <div class="vat-calc">
-        <div class="theme-toggle" id="themeSwitch">
-            <div class="toggle-circle"></div>
+<main>
+    <div class="blob"></div>
+    <div class="theme-btn" onclick="toggleTheme()">🌓</div>
+
+    <div class="calc-card">
+        <div id="vat" class="section active">
+            <h1>VAT Pro</h1>
+            <p>Calculate value-added tax instantly.</p>
+            <div class="input-grid">
+                <div class="full-width">
+                    <label>Amount (Net)</label>
+                    <input type="number" id="vat-net" placeholder="0.00">
+                </div>
+                <div>
+                    <label>VAT Rate (%)</label>
+                    <input type="number" id="vat-rate" value="20">
+                </div>
+                <div>
+                    <label>VAT Amount</label>
+                    <input type="text" id="vat-amt" class="result-box" disabled>
+                </div>
+                <div class="full-width">
+                    <label>Total Price</label>
+                    <input type="text" id="vat-total" class="result-box" disabled>
+                </div>
+            </div>
+            <button class="btn-calc" onclick="calcVAT()">Calculate VAT</button>
         </div>
 
-        <div class="brand">
-            <h1>JR Tech</h1>
-            <span>VAT CALCULATOR</span>
+        <div id="gold" class="section">
+            <h1>Gold Value</h1>
+            <p>Real-time gold worth & loan estimates.</p>
+            <div class="input-grid">
+                <div class="full-width">
+                    <label>Weight (Grams)</label>
+                    <input type="number" id="gold-weight" placeholder="0.00">
+                </div>
+                <div>
+                    <label>Purity (Karat)</label>
+                    <select id="gold-karat">
+                        <option value="24">24K (99.9%)</option>
+                        <option value="22" selected>22K (91.6%)</option>
+                        <option value="18">18K (75.0%)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Price per Gram ($)</label>
+                    <input type="number" id="gold-price" value="75">
+                </div>
+                <div class="full-width">
+                    <label>Market Value</label>
+                    <input type="text" id="gold-val" class="result-box" disabled>
+                </div>
+            </div>
+            <button class="btn-calc" onclick="calcGold()">Calculate Value</button>
         </div>
 
-        <div class="form-group">
-            <div class="input-box">
-                <label>Amount (Net)</label>
-                <input type="number" id="net" placeholder="e.g. 1000">
+        <div id="loan" class="section">
+            <h1>Loan EMI</h1>
+            <p>Plan your personal or business loans.</p>
+            <div class="input-grid">
+                <div class="full-width">
+                    <label>Principal Amount</label>
+                    <input type="number" id="loan-p" placeholder="10000">
+                </div>
+                <div>
+                    <label>Interest (%)</label>
+                    <input type="number" id="loan-r" value="10">
+                </div>
+                <div>
+                    <label>Tenure (Months)</label>
+                    <input type="number" id="loan-t" value="12">
+                </div>
+                <div class="full-width">
+                    <label>Monthly EMI</label>
+                    <input type="text" id="loan-emi" class="result-box" disabled>
+                </div>
             </div>
-            <div class="input-box">
-                <label>VAT Percentage</label>
-                <input type="number" id="rate" value="20">
-            </div>
-            <div class="input-box">
-                <label>VAT Amount</label>
-                <input type="text" id="vat" disabled placeholder="0.00">
-            </div>
-            <div class="input-box">
-                <label>Total (Inclusive)</label>
-                <input type="text" id="total" disabled placeholder="0.00">
-            </div>
-        </div>
-
-        <div class="btn-group">
-            <button id="calc">Calculate</button>
-            <button id="reset">Reset</button>
-        </div>
-
-        <div class="footer">
-            &copy; 2026 JR Tech Solutions
+            <button class="btn-calc" onclick="calcLoan()">Calculate EMI</button>
         </div>
     </div>
-</div>
+</main>
 
 <script>
-    const body = document.body;
-    const themeSwitch = document.getElementById('themeSwitch');
-    const netInput = document.getElementById('net');
-    const rateInput = document.getElementById('rate');
-    const vatInput = document.getElementById('vat');
-    const totalInput = document.getElementById('total');
+    function toggleTheme() {
+        const body = document.body;
+        body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
 
-    // Theme Toggle Logic
-    themeSwitch.onclick = () => {
-        const currentTheme = body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', newTheme);
-    };
+    function showCalc(id, el) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
 
-    // Calculation Logic with Animation
-    document.getElementById('calc').onclick = () => {
-        const n = parseFloat(netInput.value);
-        const r = parseFloat(rateInput.value);
+    // MATH LOGIC
+    function format(val) { return val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
 
-        if (isNaN(n) || isNaN(r)) {
-            netInput.style.borderColor = "#ff4d4d";
-            setTimeout(() => netInput.style.borderColor = "var(--border)", 2000);
-            return;
-        }
-
+    function calcVAT() {
+        const n = parseFloat(document.getElementById('vat-net').value);
+        const r = parseFloat(document.getElementById('vat-rate').value);
+        if(!n) return;
         const v = (n * r) / 100;
-        const t = n + v;
+        document.getElementById('vat-amt').value = format(v);
+        document.getElementById('vat-total').value = format(n + v);
+    }
 
-        // Apply formatted values
-        vatInput.value = v.toLocaleString(undefined, {minimumFractionDigits: 2});
-        totalInput.value = t.toLocaleString(undefined, {minimumFractionDigits: 2});
+    function calcGold() {
+        const w = parseFloat(document.getElementById('gold-weight').value);
+        const k = parseInt(document.getElementById('gold-karat').value);
+        const p = parseFloat(document.getElementById('gold-price').value);
+        if(!w) return;
+        const val = (w * (k/24) * p);
+        document.getElementById('gold-val').value = "$" + format(val);
+    }
 
-        // Add success animation
-        [vatInput, totalInput].forEach(el => {
-            el.parentElement.classList.add('success-pulse');
-            setTimeout(() => el.parentElement.classList.remove('success-pulse'), 500);
-        });
-    };
-
-    document.getElementById('reset').onclick = () => {
-        [netInput, rateInput, vatInput, totalInput].forEach(i => i.value = "");
-        rateInput.value = "20";
-    };
+    function calcLoan() {
+        const p = parseFloat(document.getElementById('loan-p').value);
+        const r = parseFloat(document.getElementById('loan-r').value) / 12 / 100;
+        const n = parseFloat(document.getElementById('loan-t').value);
+        if(!p) return;
+        const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        document.getElementById('loan-emi').value = "$" + format(emi);
+    }
 </script>
 
 </body>
